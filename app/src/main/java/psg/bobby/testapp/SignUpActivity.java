@@ -39,6 +39,9 @@ public class SignUpActivity extends AppCompatActivity {
             //have space
             Log.d("13decV1", "Have space");
 
+            Myalert myalert = new Myalert(SignUpActivity.this,"Have space","pelase Fill All blank", R.drawable.doremon48);
+            myalert.myDialog();
+
         }
 
     } //clickSign

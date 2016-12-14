@@ -18,8 +18,7 @@
         android:textSize="25sp"
         android:onClick="clickSignUpSign"
         android:layout_alignParentBottom="true"
-        android:textStyle="normal|bold"
-        android:textColor="?attr/editTextColor" />
+        android:textStyle="normal|bold" />
 
     <TextView
         android:text="@string/signUp"
@@ -28,8 +27,7 @@
         android:id="@+id/textView"
         android:textSize="30sp"
         android:textStyle="normal|bold"
-        android:layout_centerHorizontal="true"
-        android:textColor="?attr/editTextColor" />
+        android:layout_centerHorizontal="true" />
 
     <LinearLayout
         android:orientation="vertical"
