@@ -79,6 +79,7 @@
             android:text="List View"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="clickListView"
             android:id="@+id/button4"
             android:layout_weight="1" />
     </LinearLayout>

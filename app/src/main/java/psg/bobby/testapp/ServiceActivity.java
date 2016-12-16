@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,6 +28,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.jibble.simpleftp.SimpleFTP;
+
+import java.io.File;
 
 public class ServiceActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -41,7 +46,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     private TextView textView;
     private EditText editText;
     private ImageView imageView, takephotoImageView;
-    private String nameImageString, pathImageString;
+    private String nameImageString, pathImageString, urlImageString;
     private Uri uri;
     private boolean aBoolean = true;
 
@@ -96,6 +101,12 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
 
 
     } // Main method
+
+
+    public void clickListView(View view) {
+        startActivity(new Intent(ServiceActivity.this, LTClistView.class));
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode,
@@ -164,6 +175,28 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
 
     } //click save
 
+    private void uploadString() {
+        urlImageString = "http://lao-hosting.com/ltc/Image" + pathImageString.substring(pathImageString.lastIndexOf("/"));
+        Log.d("16decV2", "urlImage ==>" + urlImageString);
+
+        try {
+            UpdateLTC updateLTC = new UpdateLTC(ServiceActivity.this,
+                    nameImageString, urlImageString,
+                    Double.toString(updatelatADouble),
+                    Double.toString(updatelngADouble));
+            updateLTC.execute();
+
+            if (Boolean.parseBoolean(updateLTC.get())) {
+                Toast.makeText(ServiceActivity.this, "Save OK", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(ServiceActivity.this, "Cannot Save Data", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void uploadImage() {
 
         try {
@@ -188,6 +221,14 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
 
             }
             Log.d("16decV2", "path ==>" + pathImageString.toString());
+            SimpleFTP simpleFTP = new SimpleFTP();
+            simpleFTP.connect("ftp.lao-hosting.com",21,"ltc@lao-hosting.com","Abc12345");
+            simpleFTP.bin();
+            simpleFTP.cwd("Image");
+            simpleFTP.stor(new File(pathImageString));
+            simpleFTP.disconnect();
+            Toast.makeText(ServiceActivity.this, "Upload Image fisnish", Toast.LENGTH_SHORT).show();
+
 
 
         } catch (Exception e) {
