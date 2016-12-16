@@ -55,7 +55,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/take_photo"
-            android:onClick="clickSave"
             android:id="@+id/imageButton"
             android:layout_margin="15dp" />
 
@@ -73,6 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/button5"
+            android:onClick="clickSave"
             android:layout_weight="1" />
 
         <Button

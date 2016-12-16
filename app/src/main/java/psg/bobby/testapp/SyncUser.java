@@ -16,7 +16,7 @@ public class SyncUser extends AsyncTask<Void, Void, String>
 {
     //explicit
     private Context context;
-    private static final String urlJSON = "http://swiftcodingthai.com/ltc/php_get_data_bobby.php";
+    private static final String urlJSON = "http://lao-hosting.com/ltc/get_user_master.php";
 
     public SyncUser(Context context)
     {

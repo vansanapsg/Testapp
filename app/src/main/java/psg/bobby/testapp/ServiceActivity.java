@@ -1,9 +1,14 @@
 package psg.bobby.testapp;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.widget.TextViewCompat;
@@ -35,6 +40,8 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     private EditText editText;
     private ImageView imageView, takephotoImageView;
     private String nameImageString;
+    private Uri uri;
+    private boolean aBoolean = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +71,66 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //take photo controller
+        takephotoImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+
+        //image controller
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent.createChooser(intent, "Please choose App"), 1);
+            }
+        });
+
+
     } // Main method
+
+    @Override
+    protected void onActivityResult(int requestCode,
+                                    int resultCode,
+                                    Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
+            Log.d("16decV1", " OK ");
+
+            uri = data.getData();
+            changeImage(uri);
+
+            aBoolean = false;
+
+        }   //if
+
+    }
+
+    private void changeImage(Uri uri) {
+
+        try{
+
+            Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+            imageView.setImageBitmap(bitmap);
+
+
+
+
+        } catch (Exception e) {
+
+            Log.d("16decV1", "e changeImage ==> " + e.toString());
+        }
+
+
+    }
 
     public void clickSave(View view) {
 
@@ -79,6 +145,16 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                     R.drawable.doremon48);
             myalert.myDialog();
 
+        } else if (aBoolean) {
+            // non choose image
+            Myalert myalert = new Myalert(ServiceActivity.this,
+                    getResources().getString(R.string.title_noimage),
+                    getResources().getString(R.string.message_noimage),
+                    R.drawable.kon48);
+            myalert.myDialog();
+
+        } else {
+            //Data OK
         }
 
     } //click save
